@@ -5,8 +5,12 @@ import {Container, Content} from 'native-base';
 import AppHeader from '../components/AppHeader.js';
 import AppStock from '../components/AppStock';
 import AppFooter from '../components/AppFooter.js';
+import AppBatchSelector from '../components/AppBatchSelector'
 import {Image} from "react-native";
 
+import { createStore } from 'redux';
+import stockPrice from '../store/reducers/stockPrice';
+const store = createStore(stockPrice);
 
 const MainScreen = () => (
     <Container>
@@ -28,30 +32,13 @@ const MainScreen = () => (
             />
             <View>
                 <Text style={{fontSize: 17, left: 20, top: 4, height: 22}}>Подсвечник на 3 свечи бронза 25 см</Text>
-                <Text style={{fontSize: 20, left: 20, top: 10, height: 24}}>724,50 ₽</Text>
             </View>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap', top: 20}}>
-                <Image
-                    source={require('./Main/stockLeft.png')}
-                    style={{left: 20}}
-                />
-                <View style={{left: 23, width: 70, height: 34, bottom: 16, borderColor: '#e6e6e6', borderWidth: 1}}>
-                    <Text style={{marginLeft: "auto", marginRight: "auto", color: '#393939', fontSize: 13}}>700,00 ₽</Text>
-                    <Text style={{marginLeft: "auto", marginRight: "auto", color: '#89888d', fontSize: 12, bottom: 4}}>&lt; 3 шт.</Text>
-                </View>
-                <View style={{left: 26, width: 70, height: 34, bottom: 16, borderColor: '#e6e6e6', borderWidth: 1}}>
-                    <Text style={{marginLeft: "auto", marginRight: "auto", color: '#393939', fontSize: 13}}>700,00 ₽</Text>
-                    <Text style={{marginLeft: "auto", marginRight: "auto", color: '#89888d', fontSize: 12, bottom: 4}}>4-10 шт.</Text>
-                </View>
-                <View style={{left: 29, width: 70, height: 34, bottom: 16, borderColor: '#e6e6e6', borderWidth: 1}}>
-                    <Text style={{marginLeft: "auto", marginRight: "auto", color: '#393939', fontSize: 13}}>700,00 ₽</Text>
-                    <Text style={{marginLeft: "auto", marginRight: "auto", color: '#89888d', fontSize: 12, bottom: 4}}>11-20 шт.</Text>
-                </View>
-                <Image
-                    source={require('./Main/stockRight.png')}
-                    style={{left: 32}}
-                />
-            </View>
+           <AppBatchSelector
+               value={store.getState()}
+               oneBatch={() => store.dispatch({ type: "oneBatch" })}
+               twoBatch={() => store.dispatch({ type: "twoBatch" })}
+               treeBatch={() => store.dispatch({ type: "treeBatch" })}
+           />
             <Image
                 source={require('./Main/addCart.png')}
                 style={{left: 270, top: -45}}
@@ -82,5 +69,5 @@ const MainScreen = () => (
         <AppFooter/>
     </Container>
 );
-
 export default MainScreen;
+store.subscribe(MainScreen);
